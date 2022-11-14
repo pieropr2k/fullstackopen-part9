@@ -19,7 +19,7 @@ const parseArgumentsBMI = (args: Array<string>): MultiplyValues => {
 
 type Operation = 'Underweight' | 'Normal (healthy weight)' | 'Overweight (Pre-obese)' | 'Obese';
 
-const calculateBmi = (height: number, weight: number) : Operation => {
+export const calculateBmi = (height: number, weight: number) : Operation => {
   let bmi = weight/Math.pow(height/100, 2)
   //console.log(bmi)
   if (bmi < 18.5) return 'Underweight';
