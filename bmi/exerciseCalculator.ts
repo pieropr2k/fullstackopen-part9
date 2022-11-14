@@ -52,7 +52,7 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (exerciseHoursPerDay: Array<number>, targetAmount: number): Result => {
+export const calculateExercises = (exerciseHoursPerDay: Array<number>, targetAmount: number): Result => {
   let average: number = exerciseHoursPerDay.reduce((a, b) => a + b, 0)/exerciseHoursPerDay.length
   //console.log(exerciseHoursPerDay.filter(el=>el!=0))
   const { rating, ratingDescription } = getRatingInfo(average)
