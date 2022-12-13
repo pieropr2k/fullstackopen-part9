@@ -40,7 +40,7 @@ type Fields = {
   dateOfBirth: unknown,
   ssn: unknown,
   gender: unknown,
-  occupation: unknown 
+  occupation: unknown
 };
 
 // Exercise 9.13
@@ -50,7 +50,8 @@ const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation }: Field
     dateOfBirth: parseDate(dateOfBirth),
     ssn: parseString(ssn, 'ssn'),
     gender: parseGender(gender),
-    occupation: parseString(occupation, 'occupation')
+    occupation: parseString(occupation, 'occupation'),
+    entries: []
   };
   return newEntry;
 };
