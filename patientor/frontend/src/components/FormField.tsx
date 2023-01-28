@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import {
   Select,
@@ -17,11 +17,23 @@ export type GenderOption = {
   label: string;
 };
 
+// structure of a single option
+export type EntryTypeOption = {
+  value: string;
+  label: string;
+};
+
+// structure of a single option
+export type HealthCheckRatingOption = {
+  value: number;
+  label: string;
+};
+
 // props for select field component
 type SelectFieldProps = {
   name: string;
   label: string;
-  options: GenderOption[];
+  options: GenderOption[] | EntryTypeOption[] | HealthCheckRatingOption[];
 };
 
 const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;

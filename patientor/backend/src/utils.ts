@@ -1,4 +1,5 @@
-import { Gender, NewPatientEntry } from './types';
+import { BaseEntry, Entry, Gender, HealthCheckRating, NewPatientEntry } from './types';
+import { v1 as uuid } from 'uuid';
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -8,7 +9,7 @@ const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error('Incorrect or missing date: ' + date);
   }
-  return date;
+  return new Date(date).toISOString().split('T')[0];
 };
 
 const isString = (text: unknown): text is string => {
@@ -54,6 +55,65 @@ const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation }: Field
     entries: []
   };
   return newEntry;
+};
+
+//const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHealthCheckRating = (param: any): boolean => {
+  console.log(Object.values(HealthCheckRating), "jaja");
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseHealthCheckRating = (healthCheck: unknown): HealthCheckRating => {
+  //console.log(healthCheck);
+  //console.log(isHealthCheckRating(healthCheck));
+  if (isHealthCheckRating(healthCheck) === false) {
+    throw new Error(healthCheck + ' is not in the range...');
+  }
+  return healthCheck as HealthCheckRating;
+};
+
+// Exercise 9.23
+export const toNewEntry = (object: Entry): Entry => {
+  const newEntry: BaseEntry = {
+    id: uuid(),
+    description: parseString(object.description, 'description'),
+    date: parseDate(object.date),
+    specialist: parseString(object.specialist, 'specialist'),
+  };
+  switch (object.type) {
+    case 'Hospital':
+      return {
+        ...newEntry,
+        diagnosisCodes: object.diagnosisCodes,
+        type: 'Hospital',
+        discharge: {
+          date: parseDate(object.discharge.date),
+          criteria: parseString(object.discharge.criteria, 'dischargeCriteria')
+        }
+      };
+    case 'OccupationalHealthcare':
+      const sickLeave = object.sickLeave ? {
+        startDate: parseDate(object.sickLeave.startDate),
+        endDate: parseDate(object.sickLeave.endDate)
+      } : undefined;
+      return {
+        ...newEntry,
+        type: 'OccupationalHealthcare',
+        diagnosisCodes: object.diagnosisCodes,
+        employerName: parseString(object.employerName, 'employerName'),
+        sickLeave
+      };
+    case 'HealthCheck':
+      return {
+        ...newEntry,
+        type: 'HealthCheck',
+        healthCheckRating: parseHealthCheckRating(object.healthCheckRating)
+      };
+    default:
+      throw new Error(`Incorrect entry type`);
+  }
 };
 
 export default toNewPatientEntry;

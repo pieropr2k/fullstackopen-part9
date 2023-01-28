@@ -1,6 +1,7 @@
 import express from 'express';
+import patients from '../../data/patients';
 import patientsService from '../services/patients';
-import toNewPatientEntry from '../utils';
+import toNewPatientEntry, { toNewEntry } from '../utils';
 
 const router = express.Router();
 
@@ -27,6 +28,28 @@ router.post('/', (req, res) => {
     const newPatientEntry = toNewPatientEntry(req.body);
     const addedPatient = patientsService.addPatient(newPatientEntry);
     res.json(addedPatient);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
+});
+
+// Exercise 9.23
+router.post('/:id/entries', (req, res) => {
+  try {
+    const patient = patients.find(d => d.id === req.params.id);
+    if (patient) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const newEntry = toNewEntry(req.body);
+      //const updatedPatient = patientsService.addNewEntryToPatient(patient, newEntry);
+      const updatedPatient = patientsService.addPatientEntry(patient, newEntry);
+      res.send(updatedPatient);
+    } else {
+      res.send(404);
+    }
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.';
     if (error instanceof Error) {

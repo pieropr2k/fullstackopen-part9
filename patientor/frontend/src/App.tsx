@@ -21,7 +21,7 @@ const App = () => {
       const diagnosesUrl = `${apiBaseUrl}/diagnoses`;
       try {
         const { data: diagnoses } = await axios.get<Diagnosis[]>(diagnosesUrl);
-        console.log(diagnoses);
+        //console.log(diagnoses);
         dispatch(setDiagnosisList(diagnoses));
       } catch (e) {
         console.error(e);

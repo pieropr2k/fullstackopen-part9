@@ -1,8 +1,7 @@
-import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, GenderOption } from "./FormField";
+import { TextField, SelectField, GenderOption } from "../components/FormField";
 import { Gender, Patient } from "../types";
 
 /*
@@ -78,7 +77,7 @@ export const AddPatientForm = ({ onSubmit, onCancel }: Props) => {
               name="occupation"
               component={TextField}
             />
-            <SelectField label="Gender" name="gender" options={genderOptions} />
+            <SelectField label="Gender" name="gender" options={genderOptions}/>
             <Grid>
               <Grid item>
                 <Button
